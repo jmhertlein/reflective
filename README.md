@@ -17,18 +17,27 @@ GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
 
     public class TicketCommandDefinition implements CommandDefinition {
-      @CommandMethod(path = "ticket open", requiredArgs = 1, permNode = "tickets.open", helpMsg = "Usage: /ticket open [message]")
+      @CommandMethod(path = "ticket open", 
+        requiredArgs = 1, 
+        permNode = "tickets.open", 
+        helpMsg = "Usage: /ticket open [message]")
       public void openTicket(CommandSender s, String[] args) {
         //logic here
       }
     
-      @CommandMethod(path = "ticket close", requiredArgs = 1, permNode = "tickets.close", helpMsg = "Usage: /ticket close [id]")
+      @CommandMethod(path = "ticket close", 
+        requiredArgs = 1, 
+        permNode = "tickets.close", 
+        helpMsg = "Usage: /ticket close [id]")
       public void closeTicket(String[] args) {
         int id = Integer.parseInt(args[0]);
         //logic here
       }
     
-      @CommandMethod(path = "ticket list", permNode = "tickets.list", helpMsg = "Usage: /ticket list", console = true)
+      @CommandMethod(path = "ticket list", 
+        permNode = "tickets.list", 
+        helpMsg = "Usage: /ticket list", 
+        console = true)
       public void listTickets() {
         //logic here
       }
