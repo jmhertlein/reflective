@@ -28,6 +28,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic.Kind;
+import org.bukkit.command.CommandSender;
 
 /**
  *
@@ -37,15 +38,19 @@ import javax.tools.Diagnostic.Kind;
 public class CommandMethodProcessor extends AbstractProcessor {
     private static final String ERR_MSG_PARAMS = "CommandMethod-annotated method params must be either (), (CommandSender), (String[]), or (CommandSender,String[])";
     private static final String ERR_MSG_VISIBILITY = "CommandMethod-annotated methods must be public.";
-    private static final Set<List<String>> validParamsLists = new HashSet<List<String>>() {{
-        add(new ArrayList<>(0));
-        add(new ArrayList<String>(1) {{ add(org.bukkit.command.CommandSender.class.getCanonicalName()); }});
-        add(new ArrayList<String>(1) {{ add(java.lang.String[].class.getCanonicalName()); }});
-        add(new ArrayList<String>(2) {{ 
-            add(org.bukkit.command.CommandSender.class.getCanonicalName());
-            add(java.lang.String[].class.getCanonicalName()); 
+    
+    private static final Set<List<String>> validParamsLists;
+    
+    static {
+        validParamsLists = new HashSet<>();
+        validParamsLists.add(new ArrayList<>(0));
+        validParamsLists.add(new ArrayList<String>(1) {{ add(CommandSender.class.getCanonicalName()); }});
+        validParamsLists.add(new ArrayList<String>(1) {{ add(String[].class.getCanonicalName()); }});
+        validParamsLists.add(new ArrayList<String>(2) {{ 
+            add(CommandSender.class.getCanonicalName());
+            add(String[].class.getCanonicalName()); 
         }});
-    }};
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment re) {
