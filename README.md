@@ -14,6 +14,12 @@ GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL
 
 # Example
 
+The most important classes are:
+
+* net.jmhertlein.abcf.TreeCommandExecutor - a CommandExecutor implementation pre-made for you
+* net.jmhertlein.abcf.CommandDefinition - a marker interface that you'll made an implementation of
+* net.jmhertlein.abcf.CommandMethod - an annotation (one of those @ things above methods) to mark a method as a command
+
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
 
     public class TicketCommandDefinition implements CommandDefinition {
