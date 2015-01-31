@@ -60,7 +60,11 @@ Then, in onEnable() of your JavaPlugin subclass,
       //...
     }
 
-And you're set. Hop in-game and try it out.
+And you're set. Hop in-game and try it out. The commands this makes are:
+
+* /ticket open
+* /ticket close
+* /ticket list
 
 @CommandMethod has several arguments: 
 
