@@ -8,13 +8,13 @@ Your plugin makes CommandDefinition implementations and marks methods with the @
 
 The 'root' of each command still needs to be in your plugin.yml.
 
-# License
-
-GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, your plugin **must** also be licensed under the GPLv3+. To clarify, that means your plugin will be open source, and fully-fledged Free Software that anyone can use, copy, modify, and redistribute.
-
 # Usage
 
 This is a library, so to use it just add it to your classpath. Since this is a snapshot build, I don't have public downloads, but it's a maven project so feel free to build and deploy it to your own internal maven artifact server. I'll eventually have a public maven repo for it when the first stable version is released.
+
+# License
+
+GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, your plugin **must** also be licensed under the GPLv3+. To clarify, that means your plugin will be open source, and fully-fledged Free Software that anyone can use, copy, modify, and redistribute.
 
 # Example
 
