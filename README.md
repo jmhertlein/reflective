@@ -14,7 +14,7 @@ This is a library, so to use it just add it to your classpath. Since this is a s
 
 # License
 
-GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, your plugin **must** also be licensed under the GPLv3+. To clarify, that means your plugin will be open source, and fully-fledged Free Software that anyone can use, copy, modify, and redistribute.
+GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, **your plugin must also be licensed under the GPLv3+.** To clarify, that means your plugin will be open source, and fully-fledged Free Software that anyone can use, copy, modify, and redistribute.
 
 # Example
 
