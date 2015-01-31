@@ -26,49 +26,53 @@ The most important classes are:
 
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
 
-    public class TicketCommandDefinition implements CommandDefinition {
-      @CommandMethod(path = "ticket open", 
-        requiredArgs = 1, 
-        permNode = "tickets.open", 
-        helpMsg = "Usage: /ticket open [message]")
-      public void openTicket(CommandSender s, String[] args) {
-        //logic here
-      }
-    
-      @CommandMethod(path = "ticket close", 
-        requiredArgs = 1, 
-        permNode = "tickets.close", 
-        helpMsg = "Usage: /ticket close [id]")
-      public void closeTicket(String[] args) {
-        int id = Integer.parseInt(args[0]);
-        //logic here
-      }
-    
-      @CommandMethod(path = "ticket list", 
-        permNode = "tickets.list", 
-        helpMsg = "Usage: /ticket list", 
-        console = true)
-      public void listTickets() {
-        //logic here
-      }
-    }
+```java
+public class TicketCommandDefinition implements CommandDefinition {
+  @CommandMethod(path = "ticket open", 
+    requiredArgs = 1, 
+    permNode = "tickets.open", 
+    helpMsg = "Usage: /ticket open [message]")
+  public void openTicket(CommandSender s, String[] args) {
+    //logic here
+  }
+
+  @CommandMethod(path = "ticket close", 
+    requiredArgs = 1, 
+    permNode = "tickets.close", 
+    helpMsg = "Usage: /ticket close [id]")
+  public void closeTicket(String[] args) {
+    int id = Integer.parseInt(args[0]);
+    //logic here
+  }
+
+  @CommandMethod(path = "ticket list", 
+    permNode = "tickets.list", 
+    helpMsg = "Usage: /ticket list", 
+    console = true)
+  public void listTickets() {
+    //logic here
+  }
+}
+```
 
 Make sure that you add the "ticket" command to your plugin.yml!!!
 
 Then, in onEnable() of your JavaPlugin subclass,
 
-    onEnable() {
-      //...
-      TreeCommandExecutor tree = new TreeCommandExecutor();
-      TreeTabCompleter completer = new TreeTabCompleter(tree); //only if you want free tab completion, see below
-    
-      tree.add(new TicketCommandDefinition());
-    
-      PluginCommand cmd = getCommand("ticker");
-      cmd.setExecutor(tree);
-      cmd.setTabCompleter(completer); //only if you want free tab completion, see below
-      //...
-    }
+```java
+onEnable() {
+  //...
+  TreeCommandExecutor tree = new TreeCommandExecutor();
+  TreeTabCompleter completer = new TreeTabCompleter(tree); //only if you want free tab completion, see below
+
+  tree.add(new TicketCommandDefinition());
+
+  PluginCommand cmd = getCommand("ticker");
+  cmd.setExecutor(tree);
+  cmd.setTabCompleter(completer); //only if you want free tab completion, see below
+  //...
+}
+```
 
 And you're set. Hop in-game and try it out. The commands this makes are:
 
