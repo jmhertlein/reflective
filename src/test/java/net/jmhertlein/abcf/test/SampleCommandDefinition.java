@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.core.abcf.test;
+package net.jmhertlein.abcf.test;
 
-import net.jmhertlein.core.abcf.CommandDefinition;
-import net.jmhertlein.core.abcf.annotation.CommandMethod;
+import net.jmhertlein.abcf.CommandDefinition;
+import net.jmhertlein.abcf.annotation.CommandMethod;
 import org.bukkit.command.CommandSender;
 
 /**

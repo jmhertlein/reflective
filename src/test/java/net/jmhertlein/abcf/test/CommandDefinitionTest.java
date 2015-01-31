@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.core.abcf.test;
+package net.jmhertlein.abcf.test;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import net.jmhertlein.core.abcf.TreeCommandExecutor;
-import net.jmhertlein.core.abcf.TreeTabCompleter;
+import net.jmhertlein.abcf.TreeCommandExecutor;
+import net.jmhertlein.abcf.TreeTabCompleter;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.junit.After;
 import org.junit.Before;

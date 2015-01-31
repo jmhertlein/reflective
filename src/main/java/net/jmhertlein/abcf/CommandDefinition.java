@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Joshua Michael Hertlein <jmhertlein@gmail.com>
+ * Copyright (C) 2015 Joshua Michael Hertlein <jmhertlein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,30 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.core.abcf;
+package net.jmhertlein.abcf;
 
 /**
- *
+ * Marker interface for command definitions
  * @author joshua
+ * @see net.jmhertlein.core.abcf.annotation.CommandMethod
  */
-public class InsufficientPermissionException extends Exception {
-
-    private final String customMessage;
-
-    public InsufficientPermissionException() {
-        customMessage = null;
-    }
-
-    public InsufficientPermissionException(String customMessage) {
-        super(customMessage);
-        this.customMessage = customMessage;
-    }
-
-    public String getCustomMessage() {
-        return customMessage;
-    }
-
-    public boolean hasCustomMessage() {
-        return customMessage != null;
-    }
-}
+public interface CommandDefinition {}

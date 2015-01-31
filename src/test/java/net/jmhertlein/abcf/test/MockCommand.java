@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Joshua Michael Hertlein <jmhertlein@gmail.com>
+ * Copyright (C) 2015 Joshua Michael Hertlein
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.core.abcf;
+package net.jmhertlein.abcf.test;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
- * Marker interface for command definitions
+ *
  * @author joshua
- * @see net.jmhertlein.core.abcf.annotation.CommandMethod
  */
-public interface CommandDefinition {}
+public class MockCommand extends Command {
+
+    public MockCommand(String name) {
+        super(name);
+    }
+    
+
+    @Override
+    public boolean execute(CommandSender cs, String string, String[] strings) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+}

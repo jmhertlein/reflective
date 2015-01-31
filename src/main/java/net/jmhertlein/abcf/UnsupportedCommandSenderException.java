@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Joshua Michael Hertlein <jmhertlein@gmail.com>
+ * Copyright (C) 2013 Joshua Michael Hertlein <jmhertlein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.core.abcf.test;
+package net.jmhertlein.abcf;
 
-import net.jmhertlein.core.abcf.CommandDefinition;
-import net.jmhertlein.core.abcf.annotation.CommandMethod;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author joshua
  */
-public class SampleInvalidCommandDefinition implements CommandDefinition {
-    private String ran;
-    
-    @CommandMethod(path = "invalid", console = true)
-    public void invalidParams(Integer i) {
-        ran = "invalidparams";
+public class UnsupportedCommandSenderException extends Exception {
+    public UnsupportedCommandSenderException(CommandSender sender) {
+        super(String.format("Unsupported command sender: %s (%s)", sender.getName(), sender.getClass()));
     }
-
-    public String getRan() {
-        return ran;
-    }
-    
 }
