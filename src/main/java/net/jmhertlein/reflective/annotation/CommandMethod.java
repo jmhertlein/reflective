@@ -25,14 +25,18 @@ import java.lang.annotation.Target;
  *
  * @author joshua
  */
-
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandMethod {
     String path();
+
     boolean console() default false;
+
     boolean player() default true;
+
     String permNode() default "";
-    String helpMsg() default "No help available.";
+
+    String helpMsg() default "";
+
     int requiredArgs() default 0;
 }

@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2015 Joshua Michael Hertlein
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package net.jmhertlein.reflective.test;
+
+import net.jmhertlein.reflective.TreeCommandExecutor;
+import org.junit.After;
+import static org.junit.Assert.assertArrayEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ *
+ * @author joshua
+ */
+public class VariadicCommandDefinitionTest {
+    private TreeCommandExecutor e;
+    private SampleVariadicCommandDefinition d;
+
+    @Before
+    public void setUp() {
+        e = new TreeCommandExecutor();
+        d = new SampleVariadicCommandDefinition();
+        e.add(d);
+    }
+
+    @After
+    public void tearDown() {
+        e = null;
+        d = null;
+    }
+
+    @Test
+    public void testSimple() {
+        e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"cmd1", "100"});
+        assertArrayEquals(new Class[]{int.class}, d.getReceivedTypes());
+    }
+
+    @Test
+    public void testLessSimple() {
+        e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"cmd2", "100", "muh str", "10.25", "false"});
+        assertArrayEquals(new Class[]{int.class, String.class, float.class, boolean.class}, d.getReceivedTypes());
+    }
+}

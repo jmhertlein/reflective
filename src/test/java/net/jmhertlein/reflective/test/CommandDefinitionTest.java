@@ -18,11 +18,8 @@ package net.jmhertlein.reflective.test;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import net.jmhertlein.reflective.TreeCommandExecutor;
 import net.jmhertlein.reflective.TreeTabCompleter;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +32,6 @@ import static org.junit.Assert.*;
 public class CommandDefinitionTest {
     private TreeCommandExecutor e;
     private SampleCommandDefinition d;
-
 
     @Before
     public void setUp() {
@@ -58,10 +54,10 @@ public class CommandDefinitionTest {
 
     @Test
     public void testLongs() {
-        e.onCommand(new MockCommandSender(), new MockCommand("this"), "this", new String[]{"one", "is", "really",  "pretty", "long"});
+        e.onCommand(new MockCommandSender(), new MockCommand("this"), "this", new String[]{"one", "is", "really", "pretty", "long"});
         assertEquals(d.getRan(), "longcmd");
 
-        e.onCommand(new MockCommandSender(), new MockCommand("this"), "this", new String[]{"one", "is", "really",  "pretty", "different"});
+        e.onCommand(new MockCommandSender(), new MockCommand("this"), "this", new String[]{"one", "is", "really", "pretty", "different"});
         assertEquals(d.getRan(), "longcmddiff");
     }
 
