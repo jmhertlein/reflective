@@ -1,8 +1,8 @@
-# ABCF - A Better (Bukkit) Command Framework
+# Reflective
 
-ABCF is a command framework for Minecraft server plugins that use the Spigot fork of the Bukkit API.
+Reflective is a command framework for Minecraft server plugins that use the Spigot fork of the Bukkit API.
 
-ABCF focuses on simplifying the process of handling commands. It offers a CommandExecutor implementation (TreeExecutor) that you add CommandDefinition instances to.
+Reflective focuses on simplifying the process of handling commands. It offers a CommandExecutor implementation (TreeExecutor) that you add CommandDefinition instances to.
 
 Your plugin makes CommandDefinition implementations and marks methods with the @CommandMethod annotation. This lets the TreeExecutor register them.
 
@@ -20,9 +20,9 @@ GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL
 
 The most important classes are:
 
-* net.jmhertlein.abcf.TreeCommandExecutor - a CommandExecutor implementation pre-made for you
-* net.jmhertlein.abcf.CommandDefinition - a marker interface that you'll made an implementation of
-* net.jmhertlein.abcf.CommandMethod - an annotation (one of those @ things above methods) to mark a method as a command
+* net.jmhertlein.reflective.TreeCommandExecutor - a CommandExecutor implementation pre-made for you
+* net.jmhertlein.reflective.CommandDefinition - a marker interface that you'll made an implementation of
+* net.jmhertlein.reflective.CommandMethod - an annotation (one of those @ things above methods) to mark a method as a command
 
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
 
@@ -102,7 +102,7 @@ While the framework can do a lot of args-count-checking, sender-type (console/pl
 
 # Bonus Features
 
-* FREE Compile-time checking of your CommandMethod-annotated methods to make sure they have the right visibility modifier and parameters (You will need to enable this in your IDE or maven- the annotation processor is net.jmhertlein.core.abcf.processor.CommandMethodProcessor)
+* FREE Compile-time checking of your CommandMethod-annotated methods to make sure they have the right visibility modifier and parameters (You will need to enable this in your IDE or maven- the annotation processor is net.jmhertlein.core.reflective.processor.CommandMethodProcessor)
 * FREE tab-completion for all commands registered with the TreeCommandExecutor. Just make a TreeTabExecutor and set it as the command's tab completer (see code snipped above).
 
 # Future Work
