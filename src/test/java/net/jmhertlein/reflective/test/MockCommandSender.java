@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.abcf.test;
+package net.jmhertlein.reflective.test;
 
 import java.util.Set;
 import org.bukkit.Server;

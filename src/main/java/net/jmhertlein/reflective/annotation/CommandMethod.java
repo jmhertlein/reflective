@@ -14,25 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.abcf.test;
+package net.jmhertlein.reflective.annotation;
 
-import net.jmhertlein.abcf.CommandDefinition;
-import net.jmhertlein.abcf.annotation.CommandMethod;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author joshua
  */
-public class SampleInvalidCommandDefinition implements CommandDefinition {
-    private String ran;
-    
-    @CommandMethod(path = "invalid", console = true)
-    public void invalidParams(Integer i) {
-        ran = "invalidparams";
-    }
 
-    public String getRan() {
-        return ran;
-    }
-    
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CommandMethod {
+    String path();
+    boolean console() default false;
+    boolean player() default true;
+    String permNode() default "";
+    String helpMsg() default "No help available.";
+    int requiredArgs() default 0;
 }

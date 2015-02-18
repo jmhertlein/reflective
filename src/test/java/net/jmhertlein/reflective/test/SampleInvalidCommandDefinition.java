@@ -14,11 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.abcf;
+package net.jmhertlein.reflective.test;
+
+import net.jmhertlein.reflective.CommandDefinition;
+import net.jmhertlein.reflective.annotation.CommandMethod;
 
 /**
- * Marker interface for command definitions
+ *
  * @author joshua
- * @see net.jmhertlein.core.abcf.annotation.CommandMethod
  */
-public interface CommandDefinition {}
+public class SampleInvalidCommandDefinition implements CommandDefinition {
+    private String ran;
+    
+    @CommandMethod(path = "invalid", console = true)
+    public void invalidParams(Integer i) {
+        ran = "invalidparams";
+    }
+
+    public String getRan() {
+        return ran;
+    }
+    
+}
