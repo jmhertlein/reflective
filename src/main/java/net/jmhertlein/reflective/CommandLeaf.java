@@ -92,7 +92,7 @@ public class CommandLeaf {
     }
 
     /**
-     * The analogue to CommandExecutor::onCommand(). This is called when a player has successfully
+     * The analog to CommandExecutor::onCommand(). This is called when a player has successfully
      * type the command and supplied enough required args
      *
      * @param sender the CommandSender executing the command
@@ -118,10 +118,6 @@ public class CommandLeaf {
             Type[] t = m.getParameterTypes();
             Object[] reflectiveArgs = new Object[t.length];
 
-            //if(t.length == 0) {
-            //    m.invoke(caller, null);
-            //    return;
-            //}
             int paramPos = 0;
             if(t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class) {
                 paramPos = 1;
@@ -157,7 +153,9 @@ public class CommandLeaf {
                         String[] leftover = new String[remaining];
                         System.arraycopy(args, argsPos, leftover, 0, remaining);
                         reflectiveArgs[paramPos] = leftover;
-                        break paramLoop;
+                        if(paramPos != t.length - 1) {
+                            throw newComplaintAboutParams(m);
+                        }
                     } else {
                         throw newComplaintAboutParams(m);
                     }
