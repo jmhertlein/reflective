@@ -28,15 +28,46 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandMethod {
+    /**
+     * The command that the user will type to run the method, minus the leading slash
+     *
+     * @return
+     */
     String path();
 
+    /**
+     *
+     * @return whether or not the console sender can run this command
+     */
     boolean console() default false;
 
+    /**
+     * Whether or not player senders can run this command
+     *
+     * @return
+     */
     boolean player() default true;
 
+    /**
+     * The permission node required to run the command
+     *
+     * @return
+     */
     String permNode() default "";
 
+    /**
+     * Should the user not supply enough arguments, this string will be returned. If not set, one
+     * will be auto-generated based on the parameters' identifiers
+     *
+     * @return
+     */
     String helpMsg() default "";
 
+    /**
+     * Number of required arguments to this command. If not specified, will use number of non-Sender
+     * and non-String[] parameters to the method
+     *
+     * @return
+     */
     int requiredArgs() default 0;
 }
