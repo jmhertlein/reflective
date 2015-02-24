@@ -72,7 +72,7 @@ public class CommandMethodProcessor extends AbstractProcessor {
                 }
             } else {
                 if(!isAllowedPrimitiveType(v.asType())) {
-                    compileError(v, "Cannot automatically convert to non-primitive type \"" + v.asType().toString() + "\"");
+                    compileError(v, "Cannot automatically convert to type \"" + v.asType().toString() + "\"");
                 }
             }
 
