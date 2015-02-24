@@ -127,6 +127,8 @@ Methods annotated with @CommandMethod must conform to these rules:
 
 While the framework can do a lot of args-count-checking, sender-type (console/player) checking, and permissions checking for you, you are of course free to ignore them and do your own checks.
 
+Reflective can also handle multiple permission nodes per command. If permNode="node.one node.two node.three" then if a user has node.one OR node.two OR node.three, then they will be able to run the command.
+
 # Bugs
 
 Open an issue here on GitHub.
