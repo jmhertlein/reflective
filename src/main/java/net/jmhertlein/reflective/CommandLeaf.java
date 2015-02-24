@@ -115,11 +115,6 @@ public class CommandLeaf {
             throw new InsufficientPermissionException();
         }
 
-        boolean isPlayer = sender instanceof Player;
-        if((isPlayer && !info.player()) || (!isPlayer && !info.console())) {
-            throw new UnsupportedCommandSenderException(sender);
-        }
-
         try {
             Type[] t = m.getParameterTypes();
             Object[] reflectiveArgs = new Object[t.length];
@@ -128,6 +123,12 @@ public class CommandLeaf {
             if(t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class) {
                 paramPos = 1;
                 reflectiveArgs[0] = sender;
+
+                if(t[0] == ConsoleCommandSender.class && !(sender instanceof ConsoleCommandSender)) {
+                    throw new UnsupportedCommandSenderException(sender);
+                } else if(t[0] == Player.class && !(sender instanceof Player)) {
+                    throw new UnsupportedCommandSenderException(sender);
+                }
             }
 
             paramLoop:

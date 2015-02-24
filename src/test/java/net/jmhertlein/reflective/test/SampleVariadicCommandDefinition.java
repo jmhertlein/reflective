@@ -33,35 +33,35 @@ public class SampleVariadicCommandDefinition implements CommandDefinition {
         return restArrSize;
     }
 
-    @CommandMethod(path = "sample cmd1", console = true)
+    @CommandMethod(path = "sample cmd1")
     public void simpleCoercionCommand(CommandSender s, int arg1) {
         System.out.println("Got " + arg1 + " and it ++ is " + (arg1 + 1));
         typesReceived = new Class[]{int.class};
     }
 
-    @CommandMethod(path = "sample cmd2", console = true)
+    @CommandMethod(path = "sample cmd2")
     public void coercionWithSender(CommandSender s, int arg1, String arg2, float arg3, boolean arg4) {
         System.out.println("woo: " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4);
         typesReceived = new Class[]{int.class, String.class, float.class, boolean.class};
     }
 
-    @CommandMethod(path = "sample cmd3", console = true)
+    @CommandMethod(path = "sample cmd3")
     public void coercionWithStringArr(CommandSender s, int arg1, int arg2, String[] rest) {
         typesReceived = new Class[]{int.class, int.class, String[].class};
         restArrSize = rest.length;
     }
 
-    @CommandMethod(path = "sample invalid1", console = true)
+    @CommandMethod(path = "sample invalid1")
     public void invalidParamType(BigInteger arg1, String arg2) {
         System.out.println("/sample invalid1 should not run!!");
     }
 
-    @CommandMethod(path = "sample invalid2", console = true)
+    @CommandMethod(path = "sample invalid2")
     public void invalidStringArrPos(String[] rest, String arg2, float arg3, boolean arg4) {
         System.out.println("/sample invalid2 should not run!!");
     }
 
-    @CommandMethod(path = "sample invalid3", console = true)
+    @CommandMethod(path = "sample invalid3")
     public void invalidSenderPos(String arg2, float arg3, CommandSender s, boolean arg4) {
         System.out.println("/sample invalid3 should not run!!");
     }
@@ -73,7 +73,7 @@ public class SampleVariadicCommandDefinition implements CommandDefinition {
      * @param arg1
      * @param arg2 this float will be missing in the test
      */
-    @CommandMethod(path = "sample notEnoughArgs", console = true)
+    @CommandMethod(path = "sample notEnoughArgs")
     public void invalidSenderPos(String arg1, float arg2) {
         typesReceived = new Class[]{String.class, float.class};
     }

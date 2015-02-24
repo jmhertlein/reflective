@@ -44,8 +44,7 @@ public class TreeCommandExecutor implements CommandExecutor {
     /**
      * Creates a new instance of a TreeCommandExecutor
      *
-     * It is ready to have leaves added to it and to be set as the executor for
-     * a command
+     * It is ready to have leaves added to it and to be set as the executor for a command
      */
     public TreeCommandExecutor() {
         root = new CommandNode(null, null);
@@ -55,9 +54,9 @@ public class TreeCommandExecutor implements CommandExecutor {
     public void add(final CommandDefinition c) {
         Method[] methods = c.getClass().getMethods();
 
-        for (final Method m : methods) {
+        for(final Method m : methods) {
             final CommandMethod cmdInfo = (CommandMethod) m.getAnnotation(CommandMethod.class);
-            if (cmdInfo == null) {
+            if(cmdInfo == null) {
                 continue;
             }
 
@@ -74,10 +73,10 @@ public class TreeCommandExecutor implements CommandExecutor {
      */
     private void add(CommandLeaf cmd) {
         CommandNode temp = root;
-        for (String s : cmd.getStringNodes()) {
+        for(String s : cmd.getStringNodes()) {
             CommandNode next = temp.getChild(s);
 
-            if (next == null) {
+            if(next == null) {
                 next = new CommandNode(temp, s);
                 temp.addChild(next);
             }
@@ -85,7 +84,7 @@ public class TreeCommandExecutor implements CommandExecutor {
             temp = next;
         }
 
-        if (temp.executable != null) {
+        if(temp.executable != null) {
             throw new RuntimeException("Error: leaf node already has command bound");
         }
 
@@ -109,12 +108,12 @@ public class TreeCommandExecutor implements CommandExecutor {
         CommandNode selectedLeaf = r.node;
         int i = r.argsPosition;
 
-        if (selectedLeaf == null) {
+        if(selectedLeaf == null) {
             sendInvalidCommandHelp(sender, root, selectedLeaf, args[i]);
             return true;
         }
         //once we reach the end, assume the rest of the stuff in args are actually arguments
-        if (selectedLeaf.executable == null) {
+        if(selectedLeaf.executable == null) {
             sendIncompleteCommandHelp(sender, root, selectedLeaf);
             return true;
         }
@@ -122,21 +121,21 @@ public class TreeCommandExecutor implements CommandExecutor {
         String[] cmdArgs = new String[args.length - i];
         System.arraycopy(args, i, cmdArgs, 0, cmdArgs.length);
 
-        if (cmdArgs.length < selectedLeaf.executable.getNumRequiredArgs()) {
+        if(cmdArgs.length < selectedLeaf.executable.getNumRequiredArgs()) {
             sender.sendMessage(selectedLeaf.executable.getMissingRequiredArgsHelpMessage());
             return true;
         }
         try {
             selectedLeaf.executable.execute(sender, command, cmdArgs);
-        } catch (InsufficientPermissionException ex) {
-            if (ex.hasCustomMessage()) {
+        } catch(InsufficientPermissionException ex) {
+            if(ex.hasCustomMessage()) {
                 sender.sendMessage(ChatColor.RED + ex.getCustomMessage());
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to run this command.");
             }
             return true;
-        } catch (UnsupportedCommandSenderException ex) {
-            sender.sendMessage(ChatColor.RED + "This command does not support being run in your context (you're probably console!).");
+        } catch(UnsupportedCommandSenderException ex) {
+            sender.sendMessage(ChatColor.RED + ex.getLocalizedMessage());
             return true;
         }
 
@@ -185,12 +184,12 @@ public class TreeCommandExecutor implements CommandExecutor {
     public List<String> getTabCompletions(String name, String[] args) {
         TraversalResult r = traverseToEnd(name, args);
 
-        if (r.argsPosition < args.length - 1) {
+        if(r.argsPosition < args.length - 1) {
             return Collections.EMPTY_LIST;
         } else {
             List<String> ret;
             //if there's exactly one token remaining, try to filter
-            if (r.argsPosition == args.length - 1) {
+            if(r.argsPosition == args.length - 1) {
                 ret = r.node.children.keySet().stream()
                         .filter(s -> s.startsWith(args[r.argsPosition]))
                         .collect(Collectors.toList());
@@ -229,11 +228,11 @@ public class TreeCommandExecutor implements CommandExecutor {
          */
         CommandNode node;
         /**
-         * The beginning (inclusive) of the sub-array in args that did not get
-         * used when traversing to node.
+         * The beginning (inclusive) of the sub-array in args that did not get used when traversing
+         * to node.
          *
-         * i.e. these are not part of the command, they're arguments or the
-         * incorrect trailing part of a malformed command
+         * i.e. these are not part of the command, they're arguments or the incorrect trailing part
+         * of a malformed command
          */
         int argsPosition;
 

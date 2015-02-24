@@ -25,8 +25,8 @@ import net.jmhertlein.reflective.annotation.CommandMethod;
  */
 public class SampleInvalidCommandDefinition implements CommandDefinition {
     private String ran;
-    
-    @CommandMethod(path = "invalid", console = true)
+
+    @CommandMethod(path = "invalid")
     public void invalidParams(Integer i) {
         ran = "invalidparams";
     }
@@ -34,5 +34,5 @@ public class SampleInvalidCommandDefinition implements CommandDefinition {
     public String getRan() {
         return ran;
     }
-    
+
 }

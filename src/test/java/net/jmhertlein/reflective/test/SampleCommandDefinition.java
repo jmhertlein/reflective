@@ -27,24 +27,24 @@ import org.bukkit.command.CommandSender;
 public class SampleCommandDefinition implements CommandDefinition {
     private String ran;
     private int argsPassed;
-    
-    @CommandMethod(path = "say hi", console = true)
+
+    @CommandMethod(path = "say hi")
     public void sayHi() {
         System.out.println("Hi");
         ran = "sayhi";
     }
-    
-    @CommandMethod(path = "this one is really pretty long", console = true)
+
+    @CommandMethod(path = "this one is really pretty long")
     public void longCmd(CommandSender s, String[] args) {
         ran = "longcmd";
     }
-    
-    @CommandMethod(path = "this one is really pretty different", console = true)
+
+    @CommandMethod(path = "this one is really pretty different")
     public void longCmdDiff(CommandSender s, String[] args) {
-        ran="longcmddiff";
+        ran = "longcmddiff";
     }
-    
-    @CommandMethod(path = "long command path", requiredArgs = 3, console = true)
+
+    @CommandMethod(path = "long command path", requiredArgs = 3)
     public void longCmdWithArgs(CommandSender s, String[] args) {
         System.out.println("I was called with args:");
         for(String arg : args) {
@@ -57,20 +57,20 @@ public class SampleCommandDefinition implements CommandDefinition {
     public int getArgsPassed() {
         return argsPassed;
     }
-    
-    @CommandMethod(path = "say bye", console = true)
+
+    @CommandMethod(path = "say bye")
     public void sayBye(CommandSender s, String[] args) {
         System.out.println("Bye");
-        ran="saybye";
+        ran = "saybye";
     }
-    
-    @CommandMethod(path = "sayone", console = true)
+
+    @CommandMethod(path = "sayone")
     public void sayOne(CommandSender s, String[] args) {
         System.out.println("One");
-        ran="sayone";
+        ran = "sayone";
     }
-    
-    @CommandMethod(path = "echo", requiredArgs = 1, console = true, helpMsg = "This is help for echo. Usage: /echo <message>")
+
+    @CommandMethod(path = "echo", requiredArgs = 1, helpMsg = "This is help for echo. Usage: /echo <message>")
     public void echo(CommandSender sender, String[] args) {
         StringBuilder b = new StringBuilder();
         for(String s : args) {
@@ -78,26 +78,26 @@ public class SampleCommandDefinition implements CommandDefinition {
             b.append(' ');
         }
         System.out.println(b.toString());
-        ran="echo";
+        ran = "echo";
     }
-    
-    @CommandMethod(path = "param args", console = true)
+
+    @CommandMethod(path = "param args")
     public void paramArgs(String[] args) {
-        ran="paramargs";
+        ran = "paramargs";
     }
-    
-    @CommandMethod(path = "param sender", console = true)
+
+    @CommandMethod(path = "param sender")
     public void paramSender(CommandSender sender) {
-        ran="paramsender";
+        ran = "paramsender";
     }
-    
-    @CommandMethod(path = "prefixed command", console = true)
+
+    @CommandMethod(path = "prefixed command")
     public void prefixedCommand(String[] args) {
         ran = "prefixedCommand";
         argsPassed = args.length;
     }
-    
-    @CommandMethod(path = "prefixed command exec", console = true, requiredArgs = 1)
+
+    @CommandMethod(path = "prefixed command exec", requiredArgs = 1)
     public void prefixedCommandExec(String[] args) {
         ran = "prefixedCommandExec";
         argsPassed = args.length;

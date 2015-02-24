@@ -40,19 +40,6 @@ public @interface CommandMethod {
     String path();
 
     /**
-     *
-     * @return whether or not the console sender can run this command
-     */
-    boolean console() default false;
-
-    /**
-     * Whether or not player senders can run this command
-     *
-     * @return
-     */
-    boolean player() default true;
-
-    /**
      * The permission node required to run the command
      *
      * @return
