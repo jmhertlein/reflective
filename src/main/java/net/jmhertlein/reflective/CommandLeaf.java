@@ -27,6 +27,7 @@ import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import net.jmhertlein.reflective.annotation.CommandMethod;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,6 +45,7 @@ public class CommandLeaf {
     private final CommandMethod info;
     private final Method m;
     private final CommandDefinition caller;
+    private final int requiredReflectiveArgs;
 
     /**
      * Creates a new CommandLeaf from meta-information.
@@ -59,9 +61,13 @@ public class CommandLeaf {
         this.m = m;
         this.caller = d;
         this.info = info;
+        requiredReflectiveArgs = (int) Stream
+                .of(m.getParameterTypes())
+                .filter(t -> !isSenderType(t) && !t.equals(String[].class))
+                .count();
 
         if(nodeStrings.length == 0) {
-            throw new RuntimeException("Invalid command: Must have at least one non-argument string.");
+            throw new RuntimeException("Error: command's path is zero-length");
         }
     }
 
@@ -70,7 +76,7 @@ public class CommandLeaf {
      * @return how many required arguments the leaf requires
      */
     public int getNumRequiredArgs() {
-        return info.requiredArgs();
+        return Math.max(info.requiredArgs(), requiredReflectiveArgs);
     }
 
     /**

@@ -66,6 +66,18 @@ public class SampleVariadicCommandDefinition implements CommandDefinition {
         System.out.println("/sample invalid3 should not run!!");
     }
 
+    /**
+     * I'm intentionally leaving the requiredArgs annotation argument out to test how reflective
+     * handles auto-detecting required args
+     *
+     * @param arg1
+     * @param arg2 this float will be missing in the test
+     */
+    @CommandMethod(path = "sample notEnoughArgs", console = true)
+    public void invalidSenderPos(String arg1, float arg2) {
+        typesReceived = new Class[]{String.class, float.class};
+    }
+
     public Class[] getReceivedTypes() {
         return typesReceived;
     }

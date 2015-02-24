@@ -85,7 +85,7 @@ public class CommandDefinitionTest {
         boolean exceptionThrown = false;
         e.add(new SampleInvalidCommandDefinition());
         try {
-            e.onCommand(new MockCommandSender(), new MockCommand("invalid"), "invalid", new String[0]);
+            e.onCommand(new MockCommandSender(), new MockCommand("invalid"), "invalid", new String[]{"1"});
         } catch(RuntimeException ex) {
             System.out.println("testInvalidParams() correctly threw an exception!");
             exceptionThrown = true;

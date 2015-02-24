@@ -69,10 +69,10 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid1", "100", "muh str"});
-        } catch(RuntimeException e) {
-            if(!(e instanceof NullPointerException)) {
+        } catch(RuntimeException ex) {
+            if(!(ex instanceof NullPointerException)) {
                 thrown = true;
-                System.out.println("Correctly threw: " + e.getLocalizedMessage());
+                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
             }
         }
         assertTrue(thrown);
@@ -83,10 +83,10 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid2", "rest", "str", "100.1", "true"});
-        } catch(RuntimeException e) {
-            if(!(e instanceof NullPointerException)) {
+        } catch(RuntimeException ex) {
+            if(!(ex instanceof NullPointerException)) {
                 thrown = true;
-                System.out.println("Correctly threw: " + e.getLocalizedMessage());
+                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
             }
         }
         assertTrue(thrown);
@@ -97,12 +97,18 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid3", "str", "100.1", "true"});
-        } catch(RuntimeException e) {
-            if(!(e instanceof NullPointerException)) {
+        } catch(RuntimeException ex) {
+            if(!(ex instanceof NullPointerException)) {
                 thrown = true;
-                System.out.println("Correctly threw: " + e.getLocalizedMessage());
+                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
             }
         }
         assertTrue(thrown);
+    }
+
+    @Test
+    public void testLazyReqArgsCheck() {
+        e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"notEnoughArgs", "str"});
+        assertArrayEquals(null, d.getReceivedTypes());
     }
 }
