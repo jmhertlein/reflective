@@ -55,8 +55,8 @@ public @interface CommandMethod {
     String helpMsg() default "";
 
     /**
-     * Number of required arguments to this command. If not specified, will use number of non-Sender
-     * and non-String[] parameters to the method
+     * Number of required arguments to this command. If there are more parameters than required
+     * args, any arguments the player omits will be null.
      *
      * @return
      */
