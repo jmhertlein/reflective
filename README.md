@@ -5,7 +5,7 @@ Reflective is a command framework for Minecraft server plugins that use the Spig
 It lets you write commands like this:
 
 ```java
-@CommandMethod(path = "/my test command", permNode="mytest.command", requiredArgs=3)
+@CommandMethod(path = "my test command", permNode="mytest.command", requiredArgs=3)
 public void myTestCommand(Player sender, Integer arg1, Double arg2, String arg3, String[] rest) {
   //the player's command is mapped to this method in O(log(n)) time
   //The type of sender is checked for you
@@ -19,7 +19,7 @@ public void myTestCommand(Player sender, Integer arg1, Double arg2, String arg3,
 And if you don't even need any parameters (you just want the command to DO something), well, that's even simpler:
 
 ```java
-@CommandMethod(path = "/do something")
+@CommandMethod(path = "do something")
 public void thingToDo() {
 
 }
@@ -41,7 +41,7 @@ This is a library, so to use it just add it to your classpath. Since this is a s
 
 # License
 
-GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, **your plugin must also be licensed under the GPLv3+.** To clarify, that means your plugin will be open source, and fully-fledged Free Software that anyone can use, copy, modify, and redistribute.
+GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL- to use this library, **your plugin must also be licensed under the GPLv3+.** To clarify, that means your plugin will be free and open source software that anyone can use, copy, modify, and redistribute.
 
 # Example
 
@@ -123,11 +123,37 @@ Methods annotated with @CommandMethod must conform to these rules:
 * Any parameter is a String[] must be the last parameter
 * The types of all parameters must be in the set {Player, ConsoleCommandSender, CommandSender, Integer, Long, Float, Double, Boolean, Character, Byte, Short, String, String[]}
 
-# Options
+# Type Coercion
 
-While the framework can do a lot of args-count-checking, sender-type (console/player) checking, and permissions checking for you, you are of course free to ignore them and do your own checks.
+Reflective can automatically parse strings into any of the eight boxed primitive types listed above (in Requirements), as well as String itself.
+
+# Sender Checking
+
+Reflective will check the runtime type of the CommandSender against what you specify in your method's parameter list. If you used Player, only players can run the command. If you used ConsoleCommandSender, then only console can run that command. If you used CommandSender, then either can run that command.
+
+# Optional Arguments
+
+Reflective can handle optional arguments. For instance:
+
+```java
+@CommandMethod(path = "cmd", requiredArgs = 1)
+public void myCmd(Player p, Integer requiredInt, Float optionalFloat) {
+  // NOTE: The names of the identifiers are not important
+  // The order, from left to right, is what's important!
+  //...
+}
+```
+
+If the player types "/cmd 1", then optionalFloat will be null. If the player types "/cmd 1 2.2" then the float will contain 2.2.
+
+
+# Permission Checking
 
 Reflective can also handle multiple permission nodes per command. If permNode="node.one node.two node.three" then if a user has node.one OR node.two OR node.three, then they will be able to run the command.
+
+# Opt-out
+
+While the framework can do a lot of args-count-checking, sender-type (console/player) checking, and permissions checking for you, you are of course free to ignore them and do your own checks.
 
 # Bugs
 
@@ -135,4 +161,4 @@ Open an issue here on GitHub.
 
 # Contributing
 
-I'm always open to pull requests, bug reports, comments, criticism, etc. All code must be licensed under the GPLv3+, no exceptions.
+I'm always open to pull requests, bug reports, comments, criticism, etc. All contributed code must be licensed under the GPLv3+.
