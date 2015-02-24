@@ -16,10 +16,12 @@
  */
 package net.jmhertlein.reflective.test;
 
+import net.jmhertlein.reflective.CommandLeaf.UnsupportedParameterException;
 import net.jmhertlein.reflective.TreeCommandExecutor;
 import org.junit.After;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,21 +48,21 @@ public class VariadicCommandDefinitionTest {
     }
 
     @Test
-    public void testSimple() {
+    public void testSimpleCoercionCommand() {
         e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"cmd1", "100"});
-        assertArrayEquals(new Class[]{int.class}, d.getReceivedTypes());
+        assertEquals("simpleCoercionCommand", d.getRan());
     }
 
     @Test
-    public void testLessSimple() {
+    public void testCoercionWithSender() {
         e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"cmd2", "100", "muh str", "10.25", "false"});
-        assertArrayEquals(new Class[]{int.class, String.class, float.class, boolean.class}, d.getReceivedTypes());
+        assertEquals("coercionWithSender", d.getRan());
     }
 
     @Test
-    public void testExtraArgs() {
+    public void testCoercionWithStringArr() {
         e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"cmd3", "100", "200", "more", "stuff", "here"});
-        assertArrayEquals(new Class[]{int.class, int.class, String[].class}, d.getReceivedTypes());
+        assertEquals("coercionWithStringArr", d.getRan());
         assertEquals(d.getRestArrSize(), 3);
     }
 
@@ -69,13 +71,13 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid1", "100", "muh str"});
-        } catch(RuntimeException ex) {
-            if(!(ex instanceof NullPointerException)) {
-                thrown = true;
-                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
-            }
+        } catch(UnsupportedParameterException ex) {
+            thrown = true;
+            System.out.println("Correctly threw: " + ex.getLocalizedMessage());
+
         }
         assertTrue(thrown);
+        assertNull(d.getRan());
     }
 
     @Test
@@ -83,13 +85,13 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid2", "rest", "str", "100.1", "true"});
-        } catch(RuntimeException ex) {
-            if(!(ex instanceof NullPointerException)) {
-                thrown = true;
-                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
-            }
+        } catch(UnsupportedParameterException ex) {
+            thrown = true;
+            System.out.println("Correctly threw: " + ex.getLocalizedMessage());
+
         }
         assertTrue(thrown);
+        assertNull(d.getRan());
     }
 
     @Test
@@ -97,18 +99,23 @@ public class VariadicCommandDefinitionTest {
         boolean thrown = false;
         try {
             e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"invalid3", "str", "100.1", "true"});
-        } catch(RuntimeException ex) {
-            if(!(ex instanceof NullPointerException)) {
-                thrown = true;
-                System.out.println("Correctly threw: " + ex.getLocalizedMessage());
-            }
+        } catch(UnsupportedParameterException ex) {
+            thrown = true;
+            System.out.println("Correctly threw: " + ex.getLocalizedMessage());
         }
         assertTrue(thrown);
+        assertNull(d.getRan());
     }
 
     @Test
     public void testLazyReqArgsCheck() {
         e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"notEnoughArgs", "str"});
-        assertArrayEquals(null, d.getReceivedTypes());
+        assertEquals(null, d.getRan());
+    }
+
+    @Test
+    public void testMissingOptionalArgs() {
+        e.onCommand(new MockCommandSender(), new MockCommand("sample"), "sample", new String[]{"missingOptionalArgs", "str"});
+        assertEquals("missingOptionalArgs", d.getRan());
     }
 }

@@ -45,7 +45,6 @@ public class CommandLeaf {
     private final CommandMethod info;
     private final Method m;
     private final CommandDefinition caller;
-    private final int requiredReflectiveArgs;
 
     /**
      * Creates a new CommandLeaf from meta-information.
@@ -61,10 +60,6 @@ public class CommandLeaf {
         this.m = m;
         this.caller = d;
         this.info = info;
-        requiredReflectiveArgs = (int) Stream
-                .of(m.getParameterTypes())
-                .filter(t -> !isSenderType(t) && !t.equals(String[].class))
-                .count();
 
         if(nodeStrings.length == 0) {
             throw new RuntimeException("Error: command's path is zero-length");
@@ -76,7 +71,7 @@ public class CommandLeaf {
      * @return how many required arguments the leaf requires
      */
     public int getNumRequiredArgs() {
-        return Math.max(info.requiredArgs(), requiredReflectiveArgs);
+        return info.requiredArgs();
     }
 
     /**
@@ -132,26 +127,26 @@ public class CommandLeaf {
             }
 
             paramLoop:
-            for(int argsPos = 0; paramPos < t.length; paramPos++, argsPos++) {
+            for(int argsPos = 0; paramPos < t.length && argsPos < args.length; paramPos++, argsPos++) {
                 try {
-                    if(t[paramPos] == int.class) {
+                    if(t[paramPos] == Integer.class) {
                         reflectiveArgs[paramPos] = Integer.parseInt(args[argsPos]);
-                    } else if(t[paramPos] == long.class) {
+                    } else if(t[paramPos] == Long.class) {
                         reflectiveArgs[paramPos] = Long.parseLong(args[argsPos]);
-                    } else if(t[paramPos] == float.class) {
+                    } else if(t[paramPos] == Float.class) {
                         reflectiveArgs[paramPos] = Float.parseFloat(args[argsPos]);
-                    } else if(t[paramPos] == double.class) {
+                    } else if(t[paramPos] == Double.class) {
                         reflectiveArgs[paramPos] = Double.parseDouble(args[argsPos]);
-                    } else if(t[paramPos] == boolean.class) {
+                    } else if(t[paramPos] == Boolean.class) {
                         reflectiveArgs[paramPos] = strictParseBoolean(args[argsPos]);
-                    } else if(t[paramPos] == char.class) {
+                    } else if(t[paramPos] == Character.class) {
                         if(args[argsPos].length() == 1)
                             reflectiveArgs[paramPos] = args[argsPos].charAt(0);
                         else
                             throw new IllegalArgumentException(args[argsPos] + " must be a single character.");
-                    } else if(t[paramPos] == byte.class) {
+                    } else if(t[paramPos] == Byte.class) {
                         reflectiveArgs[paramPos] = Byte.parseByte(args[argsPos]);
-                    } else if(t[paramPos] == short.class) {
+                    } else if(t[paramPos] == Short.class) {
                         reflectiveArgs[paramPos] = Short.parseShort(args[argsPos]);
                     } else if(t[paramPos] == String.class) {
                         reflectiveArgs[paramPos] = args[argsPos];
@@ -171,6 +166,14 @@ public class CommandLeaf {
                 }
             }
 
+            /**
+             * We'll be kind enough to not split hairs over a null array vs empty array. The
+             * String[] representing the rest of the args will *never* be null if it is present.
+             */
+            if(t[t.length - 1] == String[].class && reflectiveArgs[reflectiveArgs.length - 1] == null) {
+                reflectiveArgs[reflectiveArgs.length - 1] = new String[0];
+            }
+
             m.invoke(caller, reflectiveArgs);
         } catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(TreeCommandExecutor.class.getName()).log(Level.SEVERE, null, ex);
@@ -186,8 +189,16 @@ public class CommandLeaf {
         return info.helpMsg().length() == 0 ? composeUsageMessage(m) : info.helpMsg();
     }
 
-    private static RuntimeException newComplaintAboutParams(Method m) {
-        return new RuntimeException("ERROR: Method " + m.getName() + " of class " + m.getClass().getName() + " has unsupported parameters.");
+    private static UnsupportedParameterException newComplaintAboutParams(Method m) {
+        return new UnsupportedParameterException("ERROR: Method " + m.getName() + " of class " + m.getClass().getName() + " has unsupported parameters.");
+    }
+
+    public static class UnsupportedParameterException extends RuntimeException {
+
+        public UnsupportedParameterException(String message) {
+            super(message);
+        }
+
     }
 
     /**
@@ -198,7 +209,7 @@ public class CommandLeaf {
      * @return the boolean value of s
      * @throws IllegalArgumentException if the string is not "true" or "false"
      */
-    private static boolean strictParseBoolean(String s) {
+    private static Boolean strictParseBoolean(String s) {
         if(s.equalsIgnoreCase("true"))
             return true;
         else if(s.equalsIgnoreCase("false"))

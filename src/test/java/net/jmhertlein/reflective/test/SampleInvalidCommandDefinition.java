@@ -16,6 +16,7 @@
  */
 package net.jmhertlein.reflective.test;
 
+import java.math.BigInteger;
 import net.jmhertlein.reflective.CommandDefinition;
 import net.jmhertlein.reflective.annotation.CommandMethod;
 
@@ -27,7 +28,7 @@ public class SampleInvalidCommandDefinition implements CommandDefinition {
     private String ran;
 
     @CommandMethod(path = "invalid")
-    public void invalidParams(Integer i) {
+    public void invalidParams(BigInteger i) {
         ran = "invalidparams";
     }
 

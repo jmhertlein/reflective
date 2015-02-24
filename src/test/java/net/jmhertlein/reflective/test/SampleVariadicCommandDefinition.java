@@ -20,13 +20,14 @@ import java.math.BigInteger;
 import net.jmhertlein.reflective.CommandDefinition;
 import net.jmhertlein.reflective.annotation.CommandMethod;
 import org.bukkit.command.CommandSender;
+import org.junit.Assert;
 
 /**
  *
  * @author joshua
  */
 public class SampleVariadicCommandDefinition implements CommandDefinition {
-    private Class[] typesReceived;
+    private String ran;
     private int restArrSize;
 
     public int getRestArrSize() {
@@ -34,51 +35,54 @@ public class SampleVariadicCommandDefinition implements CommandDefinition {
     }
 
     @CommandMethod(path = "sample cmd1")
-    public void simpleCoercionCommand(CommandSender s, int arg1) {
+    public void simpleCoercionCommand(CommandSender s, Integer arg1) {
         System.out.println("Got " + arg1 + " and it ++ is " + (arg1 + 1));
-        typesReceived = new Class[]{int.class};
+        ran = "simpleCoercionCommand";
     }
 
     @CommandMethod(path = "sample cmd2")
-    public void coercionWithSender(CommandSender s, int arg1, String arg2, float arg3, boolean arg4) {
+    public void coercionWithSender(CommandSender s, Integer arg1, String arg2, Float arg3, Boolean arg4) {
         System.out.println("woo: " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4);
-        typesReceived = new Class[]{int.class, String.class, float.class, boolean.class};
+        ran = "coercionWithSender";
     }
 
     @CommandMethod(path = "sample cmd3")
-    public void coercionWithStringArr(CommandSender s, int arg1, int arg2, String[] rest) {
-        typesReceived = new Class[]{int.class, int.class, String[].class};
+    public void coercionWithStringArr(CommandSender s, Integer arg1, Integer arg2, String[] rest) {
+        ran = "coercionWithStringArr";
         restArrSize = rest.length;
     }
 
     @CommandMethod(path = "sample invalid1")
     public void invalidParamType(BigInteger arg1, String arg2) {
         System.out.println("/sample invalid1 should not run!!");
+        ran = "invalidParamType";
     }
 
     @CommandMethod(path = "sample invalid2")
-    public void invalidStringArrPos(String[] rest, String arg2, float arg3, boolean arg4) {
+    public void invalidStringArrPos(String[] rest, String arg2, Float arg3, Boolean arg4) {
         System.out.println("/sample invalid2 should not run!!");
+        ran = "invalidStringArrPos";
     }
 
     @CommandMethod(path = "sample invalid3")
-    public void invalidSenderPos(String arg2, float arg3, CommandSender s, boolean arg4) {
+    public void invalidSenderPos(String arg2, Float arg3, CommandSender s, Boolean arg4) {
         System.out.println("/sample invalid3 should not run!!");
+        ran = "invalidSenderPos";
     }
 
-    /**
-     * I'm intentionally leaving the requiredArgs annotation argument out to test how reflective
-     * handles auto-detecting required args
-     *
-     * @param arg1
-     * @param arg2 this float will be missing in the test
-     */
-    @CommandMethod(path = "sample notEnoughArgs")
-    public void invalidSenderPos(String arg1, float arg2) {
-        typesReceived = new Class[]{String.class, float.class};
+    @CommandMethod(path = "sample notEnoughArgs", requiredArgs = 2)
+    public void invalidSenderPos(String arg1, Float arg2) {
+        ran = "invalidSenderPos";
     }
 
-    public Class[] getReceivedTypes() {
-        return typesReceived;
+    @CommandMethod(path = "sample missingOptionalArgs", requiredArgs = 1)
+    public void missingOptionalArgs(String arg1, Integer arg2) {
+        ran = "missingOptionalArgs";
+        Assert.assertNotNull(arg1);
+        Assert.assertNull(arg2);
+    }
+
+    public String getRan() {
+        return ran;
     }
 }

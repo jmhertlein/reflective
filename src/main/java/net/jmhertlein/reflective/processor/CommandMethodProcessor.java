@@ -16,14 +16,9 @@
  */
 package net.jmhertlein.reflective.processor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
@@ -35,8 +30,6 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 
 /**
  *
@@ -44,7 +37,6 @@ import org.bukkit.entity.Player;
  */
 @SupportedAnnotationTypes("net.jmhertlein.reflective.annotation.CommandMethod")
 public class CommandMethodProcessor extends AbstractProcessor {
-    private static final String ERR_MSG_PARAMS = "CommandMethod-annotated method params must be either (), (CommandSender), (String[]), or (CommandSender,String[])";
     private static final String ERR_MSG_VISIBILITY = "CommandMethod-annotated methods must be public.";
 
     @Override
@@ -81,7 +73,7 @@ public class CommandMethodProcessor extends AbstractProcessor {
                     compileError(v, "String[] must be the last parameter.");
                 }
             } else {
-                if(!isAllowedPrimitiveKind(v.asType().getKind())) {
+                if(!isAllowedPrimitiveType(v.asType())) {
                     compileError(v, "Cannot automatically convert to non-primitive type \"" + v.asType().toString() + "\"");
                 }
             }
@@ -120,23 +112,22 @@ public class CommandMethodProcessor extends AbstractProcessor {
         return processingEnv.getTypeUtils().isSameType(v.asType(), type);
     }
 
+    private boolean isType(TypeMirror t, String fqn) {
+        return processingEnv.getTypeUtils().isSameType(t, getMirrorForName(fqn));
+    }
+
     private void compileError(Element e, String msg) {
         processingEnv.getMessager().printMessage(Kind.ERROR, msg, e);
     }
 
-    private static boolean isAllowedPrimitiveKind(TypeKind k) {
-        switch(k) {
-            case LONG:
-            case BOOLEAN:
-            case CHAR:
-            case DOUBLE:
-            case FLOAT:
-            case INT:
-            case BYTE:
-            case SHORT:
-                return true;
-            default:
-                return false;
-        }
+    private boolean isAllowedPrimitiveType(TypeMirror k) {
+        return isType(k, "java.lang.Integer")
+               || isType(k, "java.lang.Long")
+               || isType(k, "java.lang.Float")
+               || isType(k, "java.lang.Double")
+               || isType(k, "java.lang.Boolean")
+               || isType(k, "java.lang.Character")
+               || isType(k, "java.lang.Byte")
+               || isType(k, "java.lang.Short");
     }
 }
