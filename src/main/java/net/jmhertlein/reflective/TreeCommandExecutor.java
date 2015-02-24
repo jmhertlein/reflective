@@ -202,10 +202,18 @@ public class TreeCommandExecutor implements CommandExecutor {
         }
     }
 
+    /**
+     * Traverses as far down the tree as it can go
+     *
+     * @param name the command's actual name, i.e. Command#getName()
+     * @param args the args the user typed, used to traverse tree
+     * @return the last node that could be matched + the index that failed to match any further
+     * nodes (either because there were no more nodes or none of them matched)
+     */
     private TraversalResult traverseToEnd(String name, String[] args) {
         CommandNode cur = null, next = root.getChild(name);
 
-        int i = -1; //Bukkit wants name and args separate, so the thing before args[0] is name.
+        int i = -1; //Bukkit wants name and args separate, so the thing before args[0] is name, which we just processed
         while(next != null) {
             i++;
             cur = next;
