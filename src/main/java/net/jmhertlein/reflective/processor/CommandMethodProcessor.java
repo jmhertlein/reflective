@@ -126,6 +126,7 @@ public class CommandMethodProcessor extends AbstractProcessor {
                || isType(k, "java.lang.Boolean")
                || isType(k, "java.lang.Character")
                || isType(k, "java.lang.Byte")
-               || isType(k, "java.lang.Short");
+               || isType(k, "java.lang.Short")
+               || isType(k, "java.lang.String");
     }
 }

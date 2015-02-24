@@ -2,9 +2,36 @@
 
 Reflective is a command framework for Minecraft server plugins that use the Spigot fork of the Bukkit API.
 
-Reflective focuses on simplifying the process of handling commands. It offers a CommandExecutor implementation (TreeExecutor) that you add CommandDefinition instances to.
+It lets you write commands like this:
+
+```java
+@CommandMethod(path = "/my test command", permNode="mytest.command", requiredArgs=3)
+public void myTestCommand(Player sender, Integer arg1, Double arg2, String arg3, String[] rest) {
+  //the player's command is mapped to this method in O(log(n)) time
+  //The type of sender is checked for you
+  //the permission node is checked for you
+  //the number of supplied arguments is checked for you
+  //arg1, 2, and 3 are all type-checked and converted for you- it can handle all the eight boxed primitive types + String
+  //any additional stuff the user typed is copied into the String[]
+}
+```
+
+And if you don't even need any parameters (you just want the command to DO something), well, that's even simpler:
+
+```java
+@CommandMethod(path = "/do something")
+public void thingToDo() {
+
+}
+```
+
+Reflective focuses on simplifying the process of handling commands and drastically reducing the amount of code you need to write. It offers a CommandExecutor implementation (TreeExecutor) that you add CommandDefinition instances to.
 
 Your plugin makes CommandDefinition implementations and marks methods with the @CommandMethod annotation. This lets the TreeExecutor register them.
+
+Reflective offers automatic tab completion for all commands registered with a TreeCommandExecutor- just add the associated TreeTabCompleter.
+
+Reflective provides an annotation processor to add compile-time sanity checks of all methods annotated with @CommandMethod (`net.jmhertlein.reflective.processor.CommandMethodProcessor`) and **it is strongly suggested you use it, I promise it's awesome**.
 
 The 'root' of each command still needs to be in your plugin.yml.
 
@@ -21,7 +48,7 @@ GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL
 The most important classes are:
 
 * net.jmhertlein.reflective.TreeCommandExecutor - a CommandExecutor implementation pre-made for you
-* net.jmhertlein.reflective.CommandDefinition - a marker interface that you'll made an implementation of
+* net.jmhertlein.reflective.CommandDefinition - a marker interface that you'll make an implementation of
 * net.jmhertlein.reflective.CommandMethod - an annotation (one of those @ things above methods) to mark a method as a command
 
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
@@ -32,7 +59,7 @@ public class TicketCommandDefinition implements CommandDefinition {
     requiredArgs = 1, 
     permNode = "tickets.open", 
     helpMsg = "Usage: /ticket open [message]")
-  public void openTicket(CommandSender s, String[] args) {
+  public void openTicket(Player p, String[] args) {
     //logic here
   }
 
@@ -40,15 +67,13 @@ public class TicketCommandDefinition implements CommandDefinition {
     requiredArgs = 1, 
     permNode = "tickets.close", 
     helpMsg = "Usage: /ticket close [id]")
-  public void closeTicket(String[] args) {
-    int id = Integer.parseInt(args[0]);
+  public void closeTicket(CommandSender s, Integer id) {
     //logic here
   }
 
   @CommandMethod(path = "ticket list", 
     permNode = "tickets.list", 
-    helpMsg = "Usage: /ticket list", 
-    console = true)
+    helpMsg = "Usage: /ticket list")
   public void listTickets() {
     //logic here
   }
@@ -83,35 +108,24 @@ And you're set. Hop in-game and try it out. The commands this makes are:
 @CommandMethod has several arguments: 
 
 * path - the command the player will type to run the method, minus the leading /. Required.
-* console - whether or not the console can run the command. Default false.
-* player - whether or not players can run the command. Default true.
 * permNode - the permission node the player needs to be able to run the command. Default none.
 * requiredArgs - the number of arguments that are guaranteed to be in the args array. If the player doesn't provide enough args, they will get the contents of helpMsg printed for them. Default 0.
 * helpMsg - The message printed to a player if they don't provide enough arguments. Default "No help available."
 
 # Requirements
 
-Methods annotated with @CommandMethod must:
+Methods annotated with @CommandMethod must conform to these rules:
 
-* Be public
-* Have formal parameter lists of one of the following: (), (CommandSender), (String[]), (CommandSender, String[]). 
+* Method must be public
+* Method must have either 0 or 1 parameters in the set {CommandSender, ConsoleCommandSender, Player}
+* Any parameter that is a CommandSender, ConsoleCommandSender, or Player, must be the first parameter
+* Method must have either 0 or 1 parameters of type String[]
+* Any parameter is a String[] must be the last parameter
+* The types of all parameters must be in the set {Player, ConsoleCommandSender, CommandSender, Integer, Long, Float, Double, Boolean, Character, Byte, Short, String, String[]}
 
 # Options
 
 While the framework can do a lot of args-count-checking, sender-type (console/player) checking, and permissions checking for you, you are of course free to ignore them and do your own checks.
-
-# Bonus Features
-
-* FREE Compile-time checking of your CommandMethod-annotated methods to make sure they have the right visibility modifier and parameters (You will need to enable this in your IDE or maven- the annotation processor is net.jmhertlein.core.reflective.processor.CommandMethodProcessor)
-* FREE tab-completion for all commands registered with the TreeCommandExecutor. Just make a TreeTabExecutor and set it as the command's tab completer (see code snipped above).
-
-# Future Work
-
-With reflection, there are a lot of possibilities. One thing I'm strongly considering doing is letting you define a method like
-
-    public void someCommand(CommandSender s, int arg1, String arg2, boolean arg3) //and so on
-
-and the framework will try to parse the input array into the types you want. After all, the point of this is to make writing commands take as little duplicated code/logic as possible.
 
 # Bugs
 
