@@ -22,8 +22,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * An annotation for marking a method as a command.
+ *
+ * For use within a CommandDefinition implementation
  *
  * @author joshua
+ * @see net.jmhertlein.reflective.CommandDefinition
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
