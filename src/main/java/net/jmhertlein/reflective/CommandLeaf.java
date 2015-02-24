@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import net.jmhertlein.reflective.annotation.CommandMethod;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -103,7 +104,10 @@ public class CommandLeaf {
      * (example: sender is console instead of Player)
      */
     public void execute(CommandSender sender, Command cmd, String[] args) throws InsufficientPermissionException, UnsupportedCommandSenderException {
-        if(!info.permNode().isEmpty() && !sender.hasPermission(info.permNode())) {
+        //if permNode is specified and for all nodes n it holds that the sender does not have n,,
+        // then throw exception
+        if(!info.permNode().isEmpty()
+           && Stream.of(info.permNode().split(" ")).allMatch(perm -> !sender.hasPermission(perm))) {
             throw new InsufficientPermissionException();
         }
 
