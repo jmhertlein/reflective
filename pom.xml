@@ -4,7 +4,7 @@
 
   <groupId>net.jmhertlein</groupId>
   <artifactId>reflective</artifactId>
-  <version>1.0-RC</version>
+  <version>1.0-RC2</version>
   <packaging>jar</packaging>
 
   <name>Reflective</name>

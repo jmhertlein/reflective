@@ -24,9 +24,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.jmhertlein.reflective.annotation.CommandMethod;
+import net.jmhertlein.reflective.io.DotWriter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +49,7 @@ public class TreeCommandExecutor implements CommandExecutor {
      * It is ready to have leaves added to it and to be set as the executor for a command
      */
     public TreeCommandExecutor() {
-        root = new CommandNode(null, null);
+        root = new CommandNode(null, "/");
         leaves = new HashSet<>();
     }
 
@@ -273,6 +275,23 @@ public class TreeCommandExecutor implements CommandExecutor {
 
         public CommandNode getChild(String nodeString) {
             return children.get(nodeString);
+        }
+    }
+
+    public void writeToGraph(DotWriter w) {
+        writeToGraph(w, root);
+    }
+
+    private void writeToGraph(DotWriter w, CommandNode n) {
+        String curNode = n.nodeString + Objects.hashCode(n);
+        w.printLabel(curNode, n.nodeString);
+        if(n.children.isEmpty())
+            return;
+
+        for(CommandNode child : n.children.values()) {
+            String childNode = child.nodeString + Objects.hashCode(child);
+            w.printEdge(curNode, childNode);
+            writeToGraph(w, child);
         }
     }
 }
