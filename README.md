@@ -37,7 +37,23 @@ The 'root' of each command still needs to be in your plugin.yml.
 
 # Usage
 
-This is a library, so to use it just add it to your classpath. Since this is a snapshot build, I don't have public downloads, but it's a maven project so feel free to build and deploy it to your own internal maven artifact server. I'll eventually have a public maven repo for it when the first stable version is released.
+This is a library, so to use it just add it to your classpath.
+
+Maven users can use this:
+
+```
+    <dependency>
+      <groupId>net.jmhertlein</groupId>
+      <artifactId>reflective</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <repository>
+      <id>jmh-repo</id>
+      <url>http://maven.jmhertlein.net/~joshua/maven/</url>
+    </repository>
+```
 
 # License
 
@@ -150,6 +166,22 @@ If the player types "/cmd 1", then optionalFloat will be null. If the player typ
 # Permission Checking
 
 Reflective can also handle multiple permission nodes per command. If permNode="node.one node.two node.three" then if a user has node.one OR node.two OR node.three, then they will be able to run the command.
+
+# GraphViz
+
+Reflective can export a tree of all of your commands to a [dot file](https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29) for you.
+
+```java
+TreeCommandExecutor e = ...; //the TreeCommandExecutor that you used
+File f = new File(filename);
+try(DotWriter w = new DotWriter(f, true)) {
+  e.writeToGraph(w);
+} catch(FileNotFoundException ex) {
+  System.err.println("Error saving graph: " + ex.getLocalizedMessage());
+}
+```
+
+This can then be converted to a PNG image with graphviz, ex: `dot -Tpng my_dotfile.dot > out.png`
 
 # Opt-out
 
