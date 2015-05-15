@@ -33,7 +33,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * A CommandLeaf is the executable leaf of a tree of commands, and represents the actual command.
+ * A CommandLeaf is the executable leaf of a tree of commands, and represents
+ * the actual command.
  *
  * @author joshua
  */
@@ -47,7 +48,8 @@ public class CommandLeaf {
     /**
      * Creates a new CommandLeaf from meta-information.
      *
-     * If your CommandDefinition class has only static methods, then d can be null
+     * If your CommandDefinition class has only static methods, then d can be
+     * null
      *
      * @param info - meta-information about the command
      * @param m - the method to invoke to run the command
@@ -59,7 +61,7 @@ public class CommandLeaf {
         this.caller = d;
         this.info = info;
 
-        if(nodeStrings.length == 0) {
+        if (nodeStrings.length == 0) {
             throw new RuntimeException("Error: command's path is zero-length");
         }
     }
@@ -76,7 +78,8 @@ public class CommandLeaf {
      *
      * @param index the index of the string to retrieve (0 is the first string)
      *
-     * @return The string at position 'index' of the command string (no arguments included)
+     * @return The string at position 'index' of the command string (no
+     * arguments included)
      */
     public String getStringAt(int index) {
         return index < nodeStrings.length ? nodeStrings[index] : null;
@@ -84,30 +87,32 @@ public class CommandLeaf {
 
     /**
      *
-     * @return an unmodifiable list of all substrings in the command string (space-delimited)
+     * @return an unmodifiable list of all substrings in the command string
+     * (space-delimited)
      */
     public List<String> getStringNodes() {
         return Collections.unmodifiableList(Arrays.asList(nodeStrings));
     }
 
     /**
-     * The analog to CommandExecutor::onCommand(). This is called when a player has successfully
-     * type the command and supplied enough required args
+     * The analog to CommandExecutor::onCommand(). This is called when a player
+     * has successfully type the command and supplied enough required args
      *
      * @param sender the CommandSender executing the command
      * @param cmd
-     * @param args required arguments and optional arguments, required arguments first.
+     * @param args required arguments and optional arguments, required arguments
+     * first.
      *
-     * @throws InsufficientPermissionException if the sender doesn't have sufficient permission to
-     * run the command
-     * @throws UnsupportedCommandSenderException if the sender is not able to run the command
-     * (example: sender is console instead of Player)
+     * @throws InsufficientPermissionException if the sender doesn't have
+     * sufficient permission to run the command
+     * @throws UnsupportedCommandSenderException if the sender is not able to
+     * run the command (example: sender is console instead of Player)
      */
     public void execute(CommandSender sender, Command cmd, String[] args) throws InsufficientPermissionException, UnsupportedCommandSenderException {
-        //if permNode is specified and for all nodes n it holds that the sender does not have n,,
+        //if permNode is specified and for all nodes n it holds that the sender does not have n,
         // then throw exception
-        if(!info.permNode().isEmpty()
-           && Stream.of(info.permNode().split(" ")).allMatch(perm -> !sender.hasPermission(perm))) {
+        if ((info.filter() && !caller.getFilter().test(sender))
+                || (!info.permNode().isEmpty() && Stream.of(info.permNode().split(" ")).allMatch(perm -> !sender.hasPermission(perm)))) {
             throw new InsufficientPermissionException();
         }
 
@@ -116,75 +121,77 @@ public class CommandLeaf {
             Object[] reflectiveArgs = new Object[t.length];
 
             int paramPos = 0;
-            if(t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class) {
+            if (paramPos < t.length && (t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class)) {
                 paramPos = 1;
                 reflectiveArgs[0] = sender;
 
-                if(t[0] == ConsoleCommandSender.class && !(sender instanceof ConsoleCommandSender)) {
+                if (t[0] == ConsoleCommandSender.class && !(sender instanceof ConsoleCommandSender)) {
                     throw new UnsupportedCommandSenderException(sender);
-                } else if(t[0] == Player.class && !(sender instanceof Player)) {
+                } else if (t[0] == Player.class && !(sender instanceof Player)) {
                     throw new UnsupportedCommandSenderException(sender);
                 }
             }
 
             paramLoop:
-            for(int argsPos = 0; paramPos < t.length && argsPos < args.length; paramPos++, argsPos++) {
+            for (int argsPos = 0; paramPos < t.length && argsPos < args.length; paramPos++, argsPos++) {
                 try {
-                    if(t[paramPos] == Integer.class) {
+                    if (t[paramPos] == Integer.class) {
                         reflectiveArgs[paramPos] = Integer.parseInt(args[argsPos]);
-                    } else if(t[paramPos] == Long.class) {
+                    } else if (t[paramPos] == Long.class) {
                         reflectiveArgs[paramPos] = Long.parseLong(args[argsPos]);
-                    } else if(t[paramPos] == Float.class) {
+                    } else if (t[paramPos] == Float.class) {
                         reflectiveArgs[paramPos] = Float.parseFloat(args[argsPos]);
-                    } else if(t[paramPos] == Double.class) {
+                    } else if (t[paramPos] == Double.class) {
                         reflectiveArgs[paramPos] = Double.parseDouble(args[argsPos]);
-                    } else if(t[paramPos] == Boolean.class) {
+                    } else if (t[paramPos] == Boolean.class) {
                         reflectiveArgs[paramPos] = strictParseBoolean(args[argsPos]);
-                    } else if(t[paramPos] == Character.class) {
-                        if(args[argsPos].length() == 1)
+                    } else if (t[paramPos] == Character.class) {
+                        if (args[argsPos].length() == 1) {
                             reflectiveArgs[paramPos] = args[argsPos].charAt(0);
-                        else
+                        } else {
                             throw new IllegalArgumentException(args[argsPos] + " must be a single character.");
-                    } else if(t[paramPos] == Byte.class) {
+                        }
+                    } else if (t[paramPos] == Byte.class) {
                         reflectiveArgs[paramPos] = Byte.parseByte(args[argsPos]);
-                    } else if(t[paramPos] == Short.class) {
+                    } else if (t[paramPos] == Short.class) {
                         reflectiveArgs[paramPos] = Short.parseShort(args[argsPos]);
-                    } else if(t[paramPos] == String.class) {
+                    } else if (t[paramPos] == String.class) {
                         reflectiveArgs[paramPos] = args[argsPos];
-                    } else if(t[paramPos] == String[].class) {
+                    } else if (t[paramPos] == String[].class) {
                         int remaining = args.length - argsPos;
                         String[] leftover = new String[remaining];
                         System.arraycopy(args, argsPos, leftover, 0, remaining);
                         reflectiveArgs[paramPos] = leftover;
-                        if(paramPos != t.length - 1) {
+                        if (paramPos != t.length - 1) {
                             throw newComplaintAboutParams(m);
                         }
                     } else {
                         throw newComplaintAboutParams(m);
                     }
-                } catch(IllegalArgumentException ex) {
+                } catch (IllegalArgumentException ex) {
                     sender.sendMessage("Error converting \"" + args[argsPos] + "\" to " + t[paramPos].getTypeName() + ": " + ex.getLocalizedMessage());
                 }
             }
 
             /**
-             * We'll be kind enough to not split hairs over a null array vs empty array. The
-             * String[] representing the rest of the args will *never* be null if it is present.
+             * We'll be kind enough to not split hairs over a null array vs
+             * empty array. The String[] representing the rest of the args will
+             * *never* be null if it is present.
              */
-            if(t[t.length - 1] == String[].class && reflectiveArgs[reflectiveArgs.length - 1] == null) {
+            if (t.length > 0 && t[t.length - 1] == String[].class && reflectiveArgs[reflectiveArgs.length - 1] == null) {
                 reflectiveArgs[reflectiveArgs.length - 1] = new String[0];
             }
 
             m.invoke(caller, reflectiveArgs);
-        } catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(TreeCommandExecutor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
      *
-     * @return the message to be sent to the user if they correctly type the command, but don't
-     * supply enough required arguments
+     * @return the message to be sent to the user if they correctly type the
+     * command, but don't supply enough required arguments
      */
     public String getMissingRequiredArgsHelpMessage() {
         return info.helpMsg().length() == 0 ? composeUsageMessage(m) : info.helpMsg();
@@ -203,20 +210,21 @@ public class CommandLeaf {
     }
 
     /**
-     * Parses a string into a boolean, but only "true" parses to true and only "false" parses to
-     * false. All other inputs throw an exceptions.
+     * Parses a string into a boolean, but only "true" parses to true and only
+     * "false" parses to false. All other inputs throw an exceptions.
      *
      * @param s
      * @return the boolean value of s
      * @throws IllegalArgumentException if the string is not "true" or "false"
      */
     private static Boolean strictParseBoolean(String s) {
-        if(s.equalsIgnoreCase("true"))
+        if (s.equalsIgnoreCase("true")) {
             return true;
-        else if(s.equalsIgnoreCase("false"))
+        } else if (s.equalsIgnoreCase("false")) {
             return false;
-        else
+        } else {
             throw new IllegalArgumentException(s + " must be \"true\" or \"false\"");
+        }
     }
 
     private static String composeUsageMessage(Method m) {

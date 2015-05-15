@@ -19,7 +19,6 @@ package net.jmhertlein.reflective.test;
 import net.jmhertlein.reflective.CommandLeaf.UnsupportedParameterException;
 import net.jmhertlein.reflective.TreeCommandExecutor;
 import org.junit.After;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;

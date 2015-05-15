@@ -45,6 +45,12 @@ public class CommandDefinitionTest {
         e = null;
         d = null;
     }
+    
+    @Test
+    public void testHi() {
+        e.onCommand(new MockCommandSender(), new MockCommand("say"), "say", new String[]{"hi"});
+        assertEquals(d.getRan(), "sayhi");
+    }
 
     @Test
     public void testSimple() {

@@ -61,4 +61,10 @@ public @interface CommandMethod {
      * @return
      */
     int requiredArgs() default 0;
+    
+    /**
+     * Whether the CommandDefinition's getFilter() predicate should be tested for this method
+     * @return 
+     */
+    boolean filter() default false;
 }

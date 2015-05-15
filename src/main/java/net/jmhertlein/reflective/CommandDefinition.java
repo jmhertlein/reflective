@@ -16,13 +16,19 @@
  */
 package net.jmhertlein.reflective;
 
+import java.util.function.Predicate;
+import org.bukkit.command.CommandSender;
+
 /**
  * Marker interface for command definitions.
  *
  * Place methods annotated with @CommandMethod in implementations of this class.
  *
  * @author joshua
- * @see net.jmhertlein.core.abcf.annotation.CommandMethod
+ * @see net.jmhertlein.core.reflective.annotation.CommandMethod
  */
 public interface CommandDefinition {
+    public default Predicate<CommandSender> getFilter() {
+        return s -> true;
+    }
 }
