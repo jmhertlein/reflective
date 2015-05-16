@@ -5,7 +5,7 @@ Reflective is a command framework for Minecraft server plugins that use the Spig
 It lets you write commands like this:
 
 ```java
-@CommandMethod(path = "my test command", permNode="mytest.command", requiredArgs=3)
+@CommandMethod(path = "my test command", permNodes={"mytest.command"}, requiredArgs=3)
 public void myTestCommand(Player sender, Integer arg1, Double arg2, String arg3, String[] rest) {
   //the player's command is mapped to this method in O(log(n)) time
   //The type of sender is checked for you
@@ -73,7 +73,7 @@ Suppose we have a simple ticket-handling plugin. The CommandDefinition might loo
 public class TicketCommandDefinition implements CommandDefinition {
   @CommandMethod(path = "ticket open", 
     requiredArgs = 1, 
-    permNode = "tickets.open", 
+    permNodes = {"tickets.open"}, 
     helpMsg = "Usage: /ticket open [message]")
   public void openTicket(Player p, String[] args) {
     //logic here
@@ -81,7 +81,7 @@ public class TicketCommandDefinition implements CommandDefinition {
 
   @CommandMethod(path = "ticket close", 
     requiredArgs = 1, 
-    permNode = "tickets.close", 
+    permNodes = {"tickets.close"}, 
     helpMsg = "Usage: /ticket close [id]")
   public void closeTicket(CommandSender s, Integer id) {
     //logic here
@@ -124,9 +124,10 @@ And you're set. Hop in-game and try it out. The commands this makes are:
 @CommandMethod has several arguments: 
 
 * path - the command the player will type to run the method, minus the leading /. Required.
-* permNode - the permission node the player needs to be able to run the command. Default none.
+* permNodes - the permission node the player needs to be able to run the command. Default none.
 * requiredArgs - the number of arguments that are guaranteed to be in the args array. If the player doesn't provide enough args, they will get the contents of helpMsg printed for them. Default 0.
 * helpMsg - The message printed to a player if they don't provide enough arguments. Default "No help available."
+* filters - Array of names of filters that getFilter() in your CommandDefinition will return.
 
 # Requirements
 
@@ -165,7 +166,37 @@ If the player types "/cmd 1", then optionalFloat will be null. If the player typ
 
 # Permission Checking
 
-Reflective can also handle multiple permission nodes per command. If permNode="node.one node.two node.three" then if a user has node.one OR node.two OR node.three, then they will be able to run the command.
+Reflective can also handle multiple permission nodes per command. If permNodes={"node.one", "node.two", "node.three"} then if a user has node.one OR node.two OR node.three, then they will be able to run the command.
+
+# Filters
+
+Reflective supports filters that are vaguely inspired by Ruby on Rail's before_action/before_filter. They let you specify a list of `Predicate<CommandSender>`s that will be tested against the sender of each command whose @CommandMethod annotation specifies that filter's name in its `filters` array.
+
+Ex:
+
+```java
+
+/*
+  In your CommandDefinition implementation...
+*/
+
+@CommandMethod(path = "cmd", filters="nameStartsWithN")
+public void myCmd() {
+  //...
+}
+
+@Override
+public Predicate<CommandSender> getFilter(String filterName) {
+  switch(filterName) {
+    case "nameStartsWithN":
+      return sender -> sender.getName().startsWith("N");
+    default:
+      return s -> true;
+  }
+}
+```
+
+In this example, when the players runs the command `/cmd`, all of the `Predicates` named in the `filters` array will be tested (in this case, just one: `"nameStartsWithN"`). If *any* of them evaluate to false, then the user will be denied permission to the command (with the default "insufficient permission" message).
 
 # GraphViz
 
@@ -190,6 +221,10 @@ While the framework can do a lot of args-count-checking, sender-type (console/pl
 # Bugs
 
 Open an issue here on GitHub.
+
+# To Do
+
+* Add support for custom messages to show the user for each filter in the event it evaluates to false.
 
 # Contributing
 
