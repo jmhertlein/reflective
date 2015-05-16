@@ -88,7 +88,7 @@ public class TicketCommandDefinition implements CommandDefinition {
   }
 
   @CommandMethod(path = "ticket list", 
-    permNode = "tickets.list", 
+    permNodes = {"tickets.list"}, 
     helpMsg = "Usage: /ticket list")
   public void listTickets() {
     //logic here
