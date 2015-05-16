@@ -44,7 +44,7 @@ public @interface CommandMethod {
      *
      * @return
      */
-    String permNode() default "";
+    String[] permNodes() default {};
 
     /**
      * Should the user not supply enough arguments, this string will be returned. If not set, one
@@ -66,5 +66,5 @@ public @interface CommandMethod {
      * Whether the CommandDefinition's getFilter() predicate should be tested for this method
      * @return 
      */
-    boolean filter() default false;
+    String[] filters() default {};
 }

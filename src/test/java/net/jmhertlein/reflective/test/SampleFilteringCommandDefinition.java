@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender;
 public class SampleFilteringCommandDefinition implements CommandDefinition {
     private String ran;
     
-    @CommandMethod(path = "use filter", filter = true)
+    @CommandMethod(path = "use filter", filters = {"youShallNotPass"})
     public void useFilter() {
         System.out.println("useFilter was called");
         ran = "useFilter";
@@ -30,7 +30,7 @@ public class SampleFilteringCommandDefinition implements CommandDefinition {
     }
 
     @Override
-    public Predicate<CommandSender> getFilter() {
+    public Predicate<CommandSender> getFilter(String name) {
         return s -> false;
     }
 

@@ -111,8 +111,11 @@ public class CommandLeaf {
     public void execute(CommandSender sender, Command cmd, String[] args) throws InsufficientPermissionException, UnsupportedCommandSenderException {
         //if permNode is specified and for all nodes n it holds that the sender does not have n,
         // then throw exception
-        if ((info.filter() && !caller.getFilter().test(sender))
-                || (!info.permNode().isEmpty() && Stream.of(info.permNode().split(" ")).allMatch(perm -> !sender.hasPermission(perm)))) {
+        if (!(
+                Stream.of(info.filters()).map(name -> caller.getFilter(name)).allMatch(p -> p.test(sender))
+                && Stream.of(info.permNodes()).allMatch(perm -> !sender.hasPermission(perm))
+             )
+           ) {
             throw new InsufficientPermissionException();
         }
 

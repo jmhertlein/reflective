@@ -28,7 +28,7 @@ import org.bukkit.command.CommandSender;
  * @see net.jmhertlein.core.reflective.annotation.CommandMethod
  */
 public interface CommandDefinition {
-    public default Predicate<CommandSender> getFilter() {
+    public default Predicate<CommandSender> getFilter(String filterName) {
         return s -> true;
     }
 }
