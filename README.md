@@ -108,7 +108,7 @@ onEnable() {
 
   tree.add(new TicketCommandDefinition());
 
-  PluginCommand cmd = getCommand("ticker");
+  PluginCommand cmd = getCommand("ticket");
   cmd.setExecutor(tree);
   cmd.setTabCompleter(completer); //only if you want free tab completion, see below
   //...
