@@ -91,7 +91,7 @@
   <distributionManagement>
     <repository>
       <id>jmh-repo</id>
-      <url>sftp://maven.jmhertlein.net:4242/home/joshua/public_html/maven</url>
+      <url>sftp://maven.jmhertlein.net:42424/var/www/maven</url>
     </repository>
   </distributionManagement>
 
