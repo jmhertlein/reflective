@@ -37,7 +37,7 @@
   <repositories>
     <repository>
       <id>jmh-repo</id>
-      <url>http://maven.jmhertlein.net/~joshua/maven/</url>
+      <url>https://maven.jmhertlein.net/</url>
     </repository>
     <repository>
       <id>spigot-nexus-snaps</id>
@@ -48,7 +48,7 @@
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
+        <artifactId>wagon-ssh-external</artifactId>
         <version>2.6</version>
       </extension>
     </extensions>
@@ -91,7 +91,7 @@
   <distributionManagement>
     <repository>
       <id>jmh-repo</id>
-      <url>sftp://maven.jmhertlein.net:42424/var/www/maven</url>
+      <url>scpexe://maven.jmhertlein.net/var/www/maven</url>
     </repository>
   </distributionManagement>
 
