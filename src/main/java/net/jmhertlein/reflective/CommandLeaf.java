@@ -61,7 +61,7 @@ public class CommandLeaf {
         this.caller = d;
         this.info = info;
 
-        if (nodeStrings.length == 0) {
+        if(nodeStrings.length == 0) {
             throw new RuntimeException("Error: command's path is zero-length");
         }
     }
@@ -109,13 +109,9 @@ public class CommandLeaf {
      * run the command (example: sender is console instead of Player)
      */
     public void execute(CommandSender sender, Command cmd, String[] args) throws InsufficientPermissionException, UnsupportedCommandSenderException {
-        //if permNode is specified and for all nodes n it holds that the sender does not have n,
-        // then throw exception
-        if (!(
-                Stream.of(info.filters()).map(name -> caller.getFilter(name)).allMatch(p -> p.test(sender))
-                && Stream.of(info.permNodes()).allMatch(perm -> !sender.hasPermission(perm))
-             )
-           ) {
+        // if sender is a player, and they fail any filter or permission test, then throw exception
+        if(!sender.isOp() && !(Stream.of(info.filters()).map(name -> caller.getFilter(name)).allMatch(p -> p.test(sender))
+                && Stream.of(info.permNodes()).allMatch(perm -> !sender.hasPermission(perm)))) {
             throw new InsufficientPermissionException();
         }
 
@@ -124,54 +120,54 @@ public class CommandLeaf {
             Object[] reflectiveArgs = new Object[t.length];
 
             int paramPos = 0;
-            if (paramPos < t.length && (t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class)) {
+            if(paramPos < t.length && (t[0] == CommandSender.class || t[0] == Player.class || t[0] == ConsoleCommandSender.class)) {
                 paramPos = 1;
                 reflectiveArgs[0] = sender;
 
-                if (t[0] == ConsoleCommandSender.class && !(sender instanceof ConsoleCommandSender)) {
+                if(t[0] == ConsoleCommandSender.class && !(sender instanceof ConsoleCommandSender)) {
                     throw new UnsupportedCommandSenderException(sender);
-                } else if (t[0] == Player.class && !(sender instanceof Player)) {
+                } else if(t[0] == Player.class && !(sender instanceof Player)) {
                     throw new UnsupportedCommandSenderException(sender);
                 }
             }
 
             paramLoop:
-            for (int argsPos = 0; paramPos < t.length && argsPos < args.length; paramPos++, argsPos++) {
+            for(int argsPos = 0; paramPos < t.length && argsPos < args.length; paramPos++, argsPos++) {
                 try {
-                    if (t[paramPos] == Integer.class) {
+                    if(t[paramPos] == Integer.class) {
                         reflectiveArgs[paramPos] = Integer.parseInt(args[argsPos]);
-                    } else if (t[paramPos] == Long.class) {
+                    } else if(t[paramPos] == Long.class) {
                         reflectiveArgs[paramPos] = Long.parseLong(args[argsPos]);
-                    } else if (t[paramPos] == Float.class) {
+                    } else if(t[paramPos] == Float.class) {
                         reflectiveArgs[paramPos] = Float.parseFloat(args[argsPos]);
-                    } else if (t[paramPos] == Double.class) {
+                    } else if(t[paramPos] == Double.class) {
                         reflectiveArgs[paramPos] = Double.parseDouble(args[argsPos]);
-                    } else if (t[paramPos] == Boolean.class) {
+                    } else if(t[paramPos] == Boolean.class) {
                         reflectiveArgs[paramPos] = strictParseBoolean(args[argsPos]);
-                    } else if (t[paramPos] == Character.class) {
-                        if (args[argsPos].length() == 1) {
+                    } else if(t[paramPos] == Character.class) {
+                        if(args[argsPos].length() == 1) {
                             reflectiveArgs[paramPos] = args[argsPos].charAt(0);
                         } else {
                             throw new IllegalArgumentException(args[argsPos] + " must be a single character.");
                         }
-                    } else if (t[paramPos] == Byte.class) {
+                    } else if(t[paramPos] == Byte.class) {
                         reflectiveArgs[paramPos] = Byte.parseByte(args[argsPos]);
-                    } else if (t[paramPos] == Short.class) {
+                    } else if(t[paramPos] == Short.class) {
                         reflectiveArgs[paramPos] = Short.parseShort(args[argsPos]);
-                    } else if (t[paramPos] == String.class) {
+                    } else if(t[paramPos] == String.class) {
                         reflectiveArgs[paramPos] = args[argsPos];
-                    } else if (t[paramPos] == String[].class) {
+                    } else if(t[paramPos] == String[].class) {
                         int remaining = args.length - argsPos;
                         String[] leftover = new String[remaining];
                         System.arraycopy(args, argsPos, leftover, 0, remaining);
                         reflectiveArgs[paramPos] = leftover;
-                        if (paramPos != t.length - 1) {
+                        if(paramPos != t.length - 1) {
                             throw newComplaintAboutParams(m);
                         }
                     } else {
                         throw newComplaintAboutParams(m);
                     }
-                } catch (IllegalArgumentException ex) {
+                } catch(IllegalArgumentException ex) {
                     sender.sendMessage("Error converting \"" + args[argsPos] + "\" to " + t[paramPos].getTypeName() + ": " + ex.getLocalizedMessage());
                 }
             }
@@ -181,12 +177,12 @@ public class CommandLeaf {
              * empty array. The String[] representing the rest of the args will
              * *never* be null if it is present.
              */
-            if (t.length > 0 && t[t.length - 1] == String[].class && reflectiveArgs[reflectiveArgs.length - 1] == null) {
+            if(t.length > 0 && t[t.length - 1] == String[].class && reflectiveArgs[reflectiveArgs.length - 1] == null) {
                 reflectiveArgs[reflectiveArgs.length - 1] = new String[0];
             }
 
             m.invoke(caller, reflectiveArgs);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(TreeCommandExecutor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -221,9 +217,9 @@ public class CommandLeaf {
      * @throws IllegalArgumentException if the string is not "true" or "false"
      */
     private static Boolean strictParseBoolean(String s) {
-        if (s.equalsIgnoreCase("true")) {
+        if(s.equalsIgnoreCase("true")) {
             return true;
-        } else if (s.equalsIgnoreCase("false")) {
+        } else if(s.equalsIgnoreCase("false")) {
             return false;
         } else {
             throw new IllegalArgumentException(s + " must be \"true\" or \"false\"");
