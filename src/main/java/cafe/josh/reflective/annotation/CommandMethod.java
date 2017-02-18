@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.annotation;
+package cafe.josh.reflective.annotation;
+
+import cafe.josh.reflective.CommandDefinition;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,7 +29,7 @@ import java.lang.annotation.Target;
  * For use within a CommandDefinition implementation
  *
  * @author joshua
- * @see net.jmhertlein.reflective.CommandDefinition
+ * @see CommandDefinition
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -61,10 +63,10 @@ public @interface CommandMethod {
      * @return
      */
     int requiredArgs() default 0;
-    
+
     /**
      * Whether the CommandDefinition's getFilter() predicate should be tested for this method
-     * @return 
+     * @return
      */
     String[] filters() default {};
 }

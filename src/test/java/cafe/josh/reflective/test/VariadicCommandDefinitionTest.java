@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.test;
+package cafe.josh.reflective.test;
 
-import net.jmhertlein.reflective.CommandLeaf.UnsupportedParameterException;
-import net.jmhertlein.reflective.TreeCommandExecutor;
+import cafe.josh.reflective.TreeCommandExecutor;
+import cafe.josh.reflective.CommandLeaf.UnsupportedParameterException;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.test;
+package cafe.josh.reflective.test;
 
 import java.math.BigInteger;
-import net.jmhertlein.reflective.CommandDefinition;
-import net.jmhertlein.reflective.annotation.CommandMethod;
+import cafe.josh.reflective.CommandDefinition;
+import cafe.josh.reflective.annotation.CommandMethod;
 import org.bukkit.command.CommandSender;
 import org.junit.Assert;
 

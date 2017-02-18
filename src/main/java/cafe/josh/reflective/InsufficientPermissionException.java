@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Joshua Michael Hertlein <jmhertlein@gmail.com>
+ * Copyright (C) 2013 Joshua Michael Hertlein <jmhertlein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.test;
-
-import java.math.BigInteger;
-import net.jmhertlein.reflective.CommandDefinition;
-import net.jmhertlein.reflective.annotation.CommandMethod;
+package cafe.josh.reflective;
 
 /**
  *
  * @author joshua
  */
-public class SampleInvalidCommandDefinition implements CommandDefinition {
-    private String ran;
+public class InsufficientPermissionException extends Exception {
 
-    @CommandMethod(path = "invalid")
-    public void invalidParams(BigInteger i) {
-        ran = "invalidparams";
+    private final String customMessage;
+
+    public InsufficientPermissionException() {
+        customMessage = null;
     }
 
-    public String getRan() {
-        return ran;
+    public InsufficientPermissionException(String customMessage) {
+        super(customMessage);
+        this.customMessage = customMessage;
     }
 
+    public String getCustomMessage() {
+        return customMessage;
+    }
+
+    public boolean hasCustomMessage() {
+        return customMessage != null;
+    }
 }

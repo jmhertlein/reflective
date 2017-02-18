@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.jmhertlein.reflective.test;
+package cafe.josh.reflective.test;
 
-import net.jmhertlein.reflective.TreeCommandExecutor;
+import cafe.josh.reflective.TreeCommandExecutor;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
@@ -31,13 +31,13 @@ public class FilterCommandDefinitionTest {
         e = null;
         d = null;
     }
-    
+
     @Test
     public void testUseFilter() {
         e.onCommand(new MockCommandSender(), new MockCommand("use"), "use", new String[]{"filter"});
         assertEquals(d.getRan(), null);
     }
-    
+
     @Test
     public void testDontUseFilter() {
         e.onCommand(new MockCommandSender(), new MockCommand("no"), "no", new String[]{"filter"});

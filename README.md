@@ -31,7 +31,7 @@ Your plugin makes CommandDefinition implementations and marks methods with the @
 
 Reflective offers automatic tab completion for all commands registered with a TreeCommandExecutor- just add the associated TreeTabCompleter.
 
-Reflective provides an annotation processor to add compile-time sanity checks of all methods annotated with @CommandMethod (`net.jmhertlein.reflective.processor.CommandMethodProcessor`) and **it is strongly suggested you use it, I promise it's awesome**.
+Reflective provides an annotation processor to add compile-time sanity checks of all methods annotated with @CommandMethod (`CommandMethodProcessor`) and **it is strongly suggested you use it, I promise it's awesome**.
 
 The 'root' of each command still needs to be in your plugin.yml.
 
@@ -63,32 +63,32 @@ GPLv3, check LICENSE or COPYING for more details. Note that this is the full GPL
 
 The most important classes are:
 
-* net.jmhertlein.reflective.TreeCommandExecutor - a CommandExecutor implementation pre-made for you
-* net.jmhertlein.reflective.CommandDefinition - a marker interface that you'll make an implementation of
+* TreeCommandExecutor - a CommandExecutor implementation pre-made for you
+* CommandDefinition - a marker interface that you'll make an implementation of
 * net.jmhertlein.reflective.CommandMethod - an annotation (one of those @ things above methods) to mark a method as a command
 
 Suppose we have a simple ticket-handling plugin. The CommandDefinition might look like this:
 
 ```java
 public class TicketCommandDefinition implements CommandDefinition {
-  @CommandMethod(path = "ticket open", 
-    requiredArgs = 1, 
-    permNodes = {"tickets.open"}, 
+  @CommandMethod(path = "ticket open",
+    requiredArgs = 1,
+    permNodes = {"tickets.open"},
     helpMsg = "Usage: /ticket open [message]")
   public void openTicket(Player p, String[] args) {
     //logic here
   }
 
-  @CommandMethod(path = "ticket close", 
-    requiredArgs = 1, 
-    permNodes = {"tickets.close"}, 
+  @CommandMethod(path = "ticket close",
+    requiredArgs = 1,
+    permNodes = {"tickets.close"},
     helpMsg = "Usage: /ticket close [id]")
   public void closeTicket(CommandSender s, Integer id) {
     //logic here
   }
 
-  @CommandMethod(path = "ticket list", 
-    permNodes = {"tickets.list"}, 
+  @CommandMethod(path = "ticket list",
+    permNodes = {"tickets.list"},
     helpMsg = "Usage: /ticket list")
   public void listTickets() {
     //logic here
@@ -121,7 +121,7 @@ And you're set. Hop in-game and try it out. The commands this makes are:
 * /ticket close
 * /ticket list
 
-@CommandMethod has several arguments: 
+@CommandMethod has several arguments:
 
 * path - the command the player will type to run the method, minus the leading /. Required.
 * permNodes - the permission node the player needs to be able to run the command. Default none.

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.processor;
+package cafe.josh.reflective.processor;
 
 import java.util.List;
 import java.util.Set;
@@ -33,7 +33,7 @@ import javax.tools.Diagnostic.Kind;
  *
  * @author joshua
  */
-@SupportedAnnotationTypes("net.jmhertlein.reflective.annotation.CommandMethod")
+@SupportedAnnotationTypes("CommandMethod")
 public class CommandMethodProcessor extends AbstractProcessor {
     private static final String ERR_MSG_VISIBILITY = "CommandMethod-annotated methods must be public.";
 

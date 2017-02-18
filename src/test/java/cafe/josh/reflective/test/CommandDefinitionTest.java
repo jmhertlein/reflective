@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.jmhertlein.reflective.test;
+package cafe.josh.reflective.test;
 
 import java.util.Collection;
 import java.util.HashSet;
-import net.jmhertlein.reflective.TreeCommandExecutor;
-import net.jmhertlein.reflective.TreeTabCompleter;
+import cafe.josh.reflective.TreeCommandExecutor;
+import cafe.josh.reflective.TreeTabCompleter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class CommandDefinitionTest {
         e = null;
         d = null;
     }
-    
+
     @Test
     public void testHi() {
         e.onCommand(new MockCommandSender(), new MockCommand("say"), "say", new String[]{"hi"});
